@@ -44,7 +44,7 @@ class MatrixMaster:
                         newMatrix.data[i][j] += self.data[i][k] * alice.data[k][j]
             return newMatrix
         
-# Scalar row multiplication. Takes the scalar multiplier and the number of the row and multiplies all elements in that row.
+# Scalar row multiplication. Takes the scalar multiplier and the number of the row and multiplies all elements of that row.
     def scalarTimesRow(self, num, row_num):
         real_number = int(float(num))
         row_number = (row_num - 1)
@@ -60,12 +60,17 @@ class MatrixMaster:
     def switchRows(self, row_one_num, row_two_num):
         row1_num = row_one_num - 1
         row2_num = row_two_num - 1
+        if (row1_num < 0 or row1_num > self.rows) or (row2_num < 0 or row2_num > self.rows):
+            raise Exception("Error! One or more of the selected row numbers exceeds the list range of the inputted matrix. Function halted.")
+        else:
+            newMatrix = MatrixMaster(self.rows, self.cols)
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    newMatrix.data[i][j] = self.data[i][j]
+                    newMatrix.data[row2_num][j] = self.data[row1_num][j]
+                    newMatrix.data[row1_num][j] = self.data[row2_num][j]
+            return newMatrix
 
-        newMatrix = MatrixMaster(self.rows, self.cols)
-        for i in range(self.rows):
-            for j in range(self.cols):
-                newMatrix.data[i][j] = self.data[i][j]
-                newMatrix.data[row1_num][j] = self.data[row1_num][j]
 
             
 # Example usage
@@ -79,7 +84,8 @@ if __name__ == "__main__":
                   [11, 12]]
 
     #trixie.print_matrix()
-    #trixie.plus(alice).print_matrix()
+    #trixie.plus(alice).print_matrix() -> Throws an error (matrices must have same cols and rows to add)
+    #alice.plus(trixie).print_matrix() -> Throws an error (matrices must have same cols and rows to add)
     #trixie.times(alice).print_matrix()
     #trixie.scalarTimesRow(2.0, 2).print_matrix()
     #trixie.switchRows(1, 2).print_matrix()
